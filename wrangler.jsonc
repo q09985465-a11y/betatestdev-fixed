@@ -1,0 +1,28 @@
+{
+	"name": "betatestdev",
+	"main": "worker/src/index.js",
+	"compatibility_date": "2026-07-02",
+	"compatibility_flags": ["nodejs_compat"],
+	"observability": {
+		"enabled": true
+	},
+	"assets": {
+		"directory": "./frontend/dist",
+		"binding": "ASSETS",
+		"not_found_handling": "single-page-application"
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "betatestdev_db",
+			"database_id": "edcd3551-8baa-4870-af94-74b33e3f7d37"
+		}
+	],
+	"r2_buckets": [
+		{
+			"bucket_name": "betatestdev-images",
+			"binding": "betatestdev_images",
+			"remote": true
+		}
+	]
+}

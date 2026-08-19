@@ -1,0 +1,16 @@
+{
+  "name": "betatestdev",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "build": "npm run build --prefix frontend",
+    "dev": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy",
+    "db:migrate:local": "wrangler d1 execute betatestdev_db --local --file=./migrations/0001_init.sql",
+    "db:migrate:remote": "wrangler d1 execute betatestdev_db --remote --file=./migrations/0001_init.sql",
+    "create-admin": "node worker/scripts/createAdmin.js"
+  },
+  "devDependencies": {
+    "wrangler": "^4.107.0"
+  }
+}
