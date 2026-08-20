@@ -42,58 +42,71 @@ export default function ProductTable({
           ) : (
             products.map((product) => (
               <tr key={product.id}>
+
                 {/* IMAGEN */}
-			<td>
-			  {
-				product.images && product.images.length > 0
-				?
-				<div>
-				  <img
-				    className="product-image"
-				    src={getImageUrl(product.images[0])}
-				    alt={product.name}
-				  />
+                <td>
+                  {product.images && product.images.length > 0 ? (
+                    <div>
+                      <img
+                        className="product-image"
+                        src={getImageUrl(product.images[0])}
+                        alt={product.name}
+                      />
 
-				  {
-					product.images.length > 1 &&
-					<small>
-					  +{product.images.length - 1} imágenes
-					</small>
-				  }
+                      {product.images.length > 1 && (
+                        <small>
+                          +{product.images.length - 1} imágenes
+                        </small>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="no-image">
+                      Sin imagen
+                    </div>
+                  )}
+                </td>
 
-				</div>
-				:
-				<div className="no-image">
-				  Sin imagen
-				</div>
-			  }
-			</td>
 
                 {/* NOMBRE */}
-                <td>{product.name}</td>
+                <td>
+                  {product.name}
+                </td>
 
-                {/* CATEGORÍA (NUEVO) */}
+
+                {/* CATEGORÍA */}
                 <td>
                   {product.category_name || "Sin categoría"}
                 </td>
+
 
                 {/* PRECIO */}
                 <td>
                   ${Number(product.price).toFixed(2)}
                 </td>
 
+
                 {/* STOCK */}
-                <td>{product.stock}</td>
+                <td>
+                  {product.stock ?? 0}
+                </td>
+
 
                 {/* ESTADO */}
                 <td>
-                  <Badge active={product.active} />
+                  <Badge
+                    active={product.active}
+                    label={product.status}
+                  />
                 </td>
+
 
                 {/* ACCIONES */}
                 <td>
                   <div className="table-actions">
-                    <Button onClick={() => onEdit(product)}>
+
+                    <Button
+                      onClick={() => onEdit(product)}
+                    >
                       Editar
                     </Button>
 
@@ -103,8 +116,10 @@ export default function ProductTable({
                     >
                       Eliminar
                     </Button>
+
                   </div>
                 </td>
+
               </tr>
             ))
           )}
