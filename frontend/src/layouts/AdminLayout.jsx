@@ -25,17 +25,7 @@ export default function AdminLayout() {
 
         <Header />
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            padding: "10px 20px",
-          }}
-        >
-          <button onClick={handleLogout}>
-            Cerrar sesión
-          </button>
-        </div>
+
 
         <main className="admin-content">
           <Outlet />

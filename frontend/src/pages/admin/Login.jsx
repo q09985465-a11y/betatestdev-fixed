@@ -4,196 +4,147 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import * as authService from "../../services/authService";
 
+import "./Login.css";
+
 export default function Login() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const {
+    login,
+    isAuthenticated,
+  } = useAuth();
 
-    const {
-        login,
-        isAuthenticated
-    } = useAuth();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-    const [loading, setLoading] = useState(false);
+  if (isAuthenticated) {
+    return <Navigate to="/admin" replace />;
+  }
 
-    const [error, setError] = useState("");
+  async function handleSubmit(e) {
+    e.preventDefault();
 
-    if (isAuthenticated) {
-        return <Navigate to="/admin" replace />;
+    setError("");
+    setLoading(true);
+
+    try {
+      const data = await authService.login(
+        username,
+        password
+      );
+
+      login(data);
+
+      navigate("/admin", {
+        replace: true,
+      });
+
+    } catch (err) {
+      setError(
+        err.message || "No se pudo iniciar sesión."
+      );
+
+    } finally {
+      setLoading(false);
     }
+  }
 
-    async function handleSubmit(e) {
+  return (
+    <main className="login-page">
 
-        e.preventDefault();
+      <form
+        className="login-card"
+        onSubmit={handleSubmit}
+      >
 
-        setError("");
-        setLoading(true);
+        <div className="login-header">
 
-        try {
+          <h1>
+            Panel Administrativo
+          </h1>
 
-            const data = await authService.login(
-                username,
-                password
-            );
-
-            login(data);
-
-            navigate("/admin", {
-                replace: true
-            });
-
-        } catch (err) {
-
-            setError(err.message);
-
-        } finally {
-
-            setLoading(false);
-
-        }
-
-    }
-
-    return (
-
-        <div
-            style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                minHeight: "100vh",
-                background: "#f5f5f5"
-            }}
-        >
-
-            <form
-
-                onSubmit={handleSubmit}
-
-                style={{
-
-                    width: 360,
-
-                    background: "#fff",
-
-                    padding: 30,
-
-                    borderRadius: 10,
-
-                    boxShadow: "0 2px 10px rgba(0,0,0,.15)"
-
-                }}
-
-            >
-
-                <h2
-                    style={{
-                        textAlign: "center",
-                        marginBottom: 25
-                    }}
-                >
-                    Panel Administrativo
-                </h2>
-
-                <input
-
-                    type="text"
-
-                    placeholder="Usuario"
-
-                    value={username}
-
-                    onChange={(e) =>
-                        setUsername(e.target.value)
-                    }
-
-                    style={{
-
-                        width: "100%",
-
-                        padding: 10,
-
-                        marginBottom: 15
-
-                    }}
-
-                />
-
-                <input
-
-                    type="password"
-
-                    placeholder="Contraseña"
-
-                    value={password}
-
-                    onChange={(e) =>
-                        setPassword(e.target.value)
-                    }
-
-                    style={{
-
-                        width: "100%",
-
-                        padding: 10,
-
-                        marginBottom: 15
-
-                    }}
-
-                />
-
-                {
-
-                    error &&
-
-                    <div
-                        style={{
-                            color: "red",
-                            marginBottom: 15
-                        }}
-                    >
-                        {error}
-                    </div>
-
-                }
-
-                <button
-
-                    type="submit"
-
-                    disabled={loading}
-
-                    style={{
-
-                        width: "100%",
-
-                        padding: 12,
-
-                        cursor: "pointer"
-
-                    }}
-
-                >
-
-                    {
-
-                        loading
-
-                            ? "Ingresando..."
-
-                            : "Ingresar"
-
-                    }
-
-                </button>
-
-            </form>
+          <p>
+            Inicia sesión para continuar
+          </p>
 
         </div>
 
-    );
 
+        <div className="login-fields">
+
+          {/* USUARIO */}
+          <div className="login-field">
+
+            <label htmlFor="username">
+              Usuario
+            </label>
+
+            <input
+              id="username"
+              type="text"
+              placeholder="Ingrese su usuario"
+              value={username}
+              onChange={(e) =>
+                setUsername(e.target.value)
+              }
+              autoComplete="username"
+              required
+            />
+
+          </div>
+
+
+          {/* CONTRASEÑA */}
+          <div className="login-field">
+
+            <label htmlFor="password">
+              Contraseña
+            </label>
+
+            <input
+              id="password"
+              type="password"
+              placeholder="Ingrese su contraseña"
+              value={password}
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
+              autoComplete="current-password"
+              required
+            />
+
+          </div>
+
+        </div>
+
+
+        {/* ERROR */}
+        {error && (
+          <div
+            className="login-error"
+            role="alert"
+          >
+            {error}
+          </div>
+        )}
+
+
+        {/* BOTÓN */}
+        <button
+          className="login-button"
+          type="submit"
+          disabled={loading}
+        >
+          {loading
+            ? "Ingresando..."
+            : "Ingresar"}
+        </button>
+
+      </form>
+
+    </main>
+  );
 }

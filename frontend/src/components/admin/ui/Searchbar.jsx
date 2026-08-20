@@ -11,7 +11,7 @@ export default function SearchBar({
 
             className="search"
 
-            placeholder="Buscar producto..."
+            placeholder="Buscar..."
 
             value={value}
 
